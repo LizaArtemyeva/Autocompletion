@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 public class Trie {
 
-    private static class Node {
+    public static class Node {
         //private Map<Character, Node> child = new TreeMap<>();
         private char key;
         List<Node> children = new ArrayList<>();
@@ -22,7 +22,7 @@ public class Trie {
     }
     Node root = new Node();
 
-    public int find(String s) {
+    public Node find(String s) {
         Node v = root;
         for (char ch : s.toLowerCase().toCharArray()) {
             boolean find = false;
@@ -33,11 +33,12 @@ public class Trie {
                 }
             }
             if(!find){
-                return 0;
+                return null;
             }
         }
-        return v.value;
+        return v;
     }
+
     public void add(String s){
 //        Node v = root;
 //        for (char ch : s.toLowerCase().toCharArray()) {
@@ -95,10 +96,70 @@ public class Trie {
             delete(s.substring(0, s.length() - 1));
         }
     }
+    private String makeWord(String path, Node start, Node find){
+        //System.out.println(path);
+        if(start==find) return path+start.key;
+        for(Node n: start.children){
+            String s = makeWord(path+start.key, n, find);
+            if(!s.isEmpty()) return s.trim();
+        }
+        return "";
+    }
+
+    public String makeWord(Node find){
+        return makeWord("", root, find);
+    }
+
+    public List<String> getWords(String s){
+        List<String> words = new ArrayList<>();
+        Node nodeStart = find(s);
+        if (nodeStart == null) return words;
+        List<Node> nodes = new ArrayList<>(nodeStart.children);
+        while (!nodes.isEmpty()){
+            List<Node> toAdd = new ArrayList<>();
+            List<Node> toRemove = new ArrayList<>();
+            for (Node n : nodes) {
+                if (n.value > 0) {
+                    words.add(makeWord(n));
+                }
+                toAdd.addAll(n.children);
+                toRemove.add(n);
+            }
+            nodes.addAll(toAdd);
+            nodes.removeAll(toRemove);
+            toAdd.clear();
+            toRemove.clear();
+        }
+
+//        for (char ch : s.toLowerCase().toCharArray()) {
+//            boolean find = false;
+//            for (Node n : v.children) {
+//                if (n.key == ch) {
+//                    v = n;
+//                    find = true;
+//                }
+//            }
+//            if(!find){
+//                return null;
+//            }
+//        }
+        return words;
+    }
 
     @Override
     public String toString() {
         //System.out.println(v.children);
         return root.toString();
+    }
+
+    public void init(){
+        this.add("apples");
+        this.add("applos");
+        this.add("app");
+        this.add("cat");
+        this.add("catalog");
+        this.add("catfishing");
+        this.add("catflix");
+        this.add("aboba");
     }
 }

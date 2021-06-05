@@ -9,7 +9,8 @@ public class Main {
         trie.add("applos");
         trie.add("app");
         trie.add("artemchik");
-        trie.delete("applos");
-        System.out.println(trie);
+        Trie.Node node = trie.find("applo");
+        //System.out.println(node);
+        System.out.println(trie.makeWord(node));
     }
 }
