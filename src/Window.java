@@ -13,7 +13,6 @@ public class Window extends JFrame{
     private JTextField userText;
     private JButton addButton, deleteButton;
     private Trie trie;
-    MouseListener mouseListener;
     public static void main(String[] args) {
         new Window();
     }
@@ -29,7 +28,6 @@ public class Window extends JFrame{
         options = new JPanel();
         options.setLayout(new GridLayout(10,1));
         options.setBounds(100, 160, 300, 250);
-        //options.setBackground(Color.black);
         trie = new Trie();
         trie.init();
 
@@ -56,7 +54,6 @@ public class Window extends JFrame{
     }
     private void update(){
         options.removeAll();
-//        System.out.println(userText.getText());
         if(userText.getText().isEmpty()) {
             revalidate();
             repaint();
@@ -76,8 +73,8 @@ public class Window extends JFrame{
         }
         revalidate();
         repaint();
-//        System.out.println(trie.getWords(userText.getText()));
     }
+
     private class TextListener implements DocumentListener{
         @Override
         public void insertUpdate(DocumentEvent e) {
